@@ -1,0 +1,173 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #6e0c11;
+  --pastel-blue:#aec6cf;
+  --dark-blue: #3d5af1;
+
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--pastel-blue);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+.MainContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 100px;
+  background-color: var(--pastel-blue);
+}
+
+.TipCalculator {
+  display: flex;
+  gap: 32px;
+  width: 100%;
+  max-width: 640px;
+  padding: 24px 32px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.LeftContainer,
+.RightContainer {
+  display: flex;
+  flex-direction:column;
+  gap: 8px;
+  flex: 1;
+  color: #be1616;
+  padding: 16px;
+  border: 1px solid #94a3b8;
+  border-radius: 12px;
+  
+}
+
+/* tidy the inputs/button so the frame looks intentional */
+.LeftContainer input {
+  padding: 8px 10px;
+  border: 3px solid #0b0b0b;
+  border-radius: 8px;
+}
+
+.LeftContainer button {
+  margin-top: 4px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--pastel-blue, #330f95);
+  cursor: pointer;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-family:Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.percentage-buttons{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.percentage-buttons button{
+  background-color: white;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.percentage-buttons .selected-button{
+  background-color: var(--dark-blue);
+  color: white;
+  font-weight: bold;
+}
+
+.splitting-checkbox{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.splitting-checkbox input{
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.result-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.result-value{
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.calculate-button{
+  background-color: white;
+  color: var(--dark-blue);
+  border: 1px solid var(--dark-blue);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.calculate-button:hover{
+  background-color: var(--dark-blue);
+  color: white;
+}
+
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon svg {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #555;
+}
+
+.input-with-icon input {
+  padding-left: 28px;
+  width: 100%;
+}
+
+.percentage-label{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}

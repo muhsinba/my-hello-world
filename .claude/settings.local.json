@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($p = Get-Content \"C:\\\\Users\\\\Dell\\\\my-next-starter\\\\package.json\" -Raw | ConvertFrom-Json; \"next: $\\($p.dependencies.next\\)\"; \"react: $\\($p.dependencies.react\\)\"; \"scripts: $\\($p.scripts.PSObject.Properties.Name -join ', '\\)\")"
+    ]
+  }
+}
