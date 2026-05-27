@@ -30,7 +30,7 @@ const resetAllValues = () => {
 
   return (
 <div className="MainContainer">
-  <h1 className="title">My Calculator</h1>
+  <h1 className="title">Tip Calculator</h1>
   <div className="TipCalculator">
     <div className="LeftContainer">
       
