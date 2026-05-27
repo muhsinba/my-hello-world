@@ -146,6 +146,10 @@ body {
   color: white;
 }
 
+.RightContainer .calculate-button{
+  margin-top: auto;
+}
+
 .input-with-icon {
   position: relative;
   display: flex;
