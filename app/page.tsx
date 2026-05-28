@@ -24,7 +24,7 @@ export default async function Home() {
         )}
       </header>
 
-      <h1 className="title">Tip Calculator</h1>
+      <h1 className="title">MS Partners Services: Tip Calculator</h1>
       <TipCalculator />
     </div>
   );
