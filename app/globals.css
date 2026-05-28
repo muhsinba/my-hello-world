@@ -175,3 +175,132 @@ body {
   flex-direction: row;
   align-items: center;
 }
+
+/* ---- Auth header on the calculator page ---- */
+.app-header{
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  max-width: 640px;
+  padding: 0 8px;
+}
+
+.auth-status{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.auth-links{
+  display: flex;
+  gap: 16px;
+}
+
+.auth-links a{
+  color: var(--dark-blue);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-links a:hover{
+  text-decoration: underline;
+}
+
+.link-button{
+  background: none;
+  border: 1px solid var(--dark-blue);
+  color: var(--dark-blue);
+  padding: 6px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.link-button:hover{
+  background-color: var(--dark-blue);
+  color: white;
+}
+
+/* ---- Login / signup forms ---- */
+.auth-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+}
+
+.auth-card{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 360px;
+  padding: 32px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.auth-title{
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.auth-field{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.auth-field label{
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.auth-field input{
+  padding: 8px 10px;
+  border: 2px solid #0b0b0b;
+  border-radius: 8px;
+   color: #1f2937;
+}
+
+.auth-error{
+  color: #be1616;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.auth-error ul{
+  margin: 4px 0 0;
+  padding-left: 18px;
+}
+
+.auth-button{
+  padding: 10px;
+  border: 1px solid var(--dark-blue);
+  border-radius: 5px;
+  background-color: var(--dark-blue);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-button:disabled{
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-switch{
+  margin: 0;
+  text-align: center;
+  color: #1f2937;
+}
+
+.auth-switch a{
+  color: var(--dark-blue);
+  font-weight: 600;
+}
