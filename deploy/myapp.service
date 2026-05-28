@@ -1,0 +1,23 @@
+[Unit]
+Description=my-hello-world (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+User=myapp
+Group=myapp
+WorkingDirectory=/opt/myapp
+EnvironmentFile=/etc/myapp.env
+ExecStart=/usr/bin/npm start --silent
+Restart=on-failure
+RestartSec=5
+
+# Hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ReadWritePaths=/var/lib/myapp
+
+[Install]
+WantedBy=multi-user.target

@@ -8,7 +8,7 @@ import {
   type FormState,
 } from '@/app/lib/definitions'
 import { db, type UserRow } from '@/app/lib/db'
-import { createSession, deleteSession } from '@/app/lib/session'
+import { createSession, deleteSession, getSession } from '@/app/lib/session'
 
 export async function signup(state: FormState, formData: FormData): Promise<FormState> {
   // 1. Validate fields
@@ -40,8 +40,12 @@ export async function signup(state: FormState, formData: FormData): Promise<Form
     return { message: 'An error occurred while creating your account.' }
   }
 
-  // 4. Create the session, then redirect
-  await createSession(String(result.lastInsertRowid))
+  // 4. Record the first login, create the session, then redirect
+  const userId = Number(result.lastInsertRowid)
+  const loginResult = db
+    .prepare('INSERT INTO login_history (user_id) VALUES (?)')
+    .run(userId)
+  await createSession(String(userId), Number(loginResult.lastInsertRowid))
   redirect('/')
 }
 
@@ -69,11 +73,21 @@ export async function login(state: FormState, formData: FormData): Promise<FormS
   const passwordsMatch = await bcrypt.compare(password, user.password)
   if (!passwordsMatch) return invalid
 
-  await createSession(String(user.id))
+  //create a login history record for the user
+  const loginResult = db
+    .prepare('INSERT INTO login_history (user_id) VALUES (?)')
+    .run(user.id)
+
+  await createSession(String(user.id), Number(loginResult.lastInsertRowid))
   redirect('/')
 }
 
 export async function logout() {
+  const session = await getSession()
+  if (session?.loginId) {
+    db.prepare(`UPDATE login_history SET logged_out_at = datetime('now') WHERE id = ?`)
+      .run(session.loginId)
+  }
   await deleteSession()
   redirect('/')
 }

@@ -1,0 +1,6 @@
+# Replace your-domain.example.com with the DNS name pointed at the VM's external IP.
+# Caddy will auto-fetch a Let's Encrypt cert on first request.
+your-domain.example.com {
+	encode gzip
+	reverse_proxy localhost:3000
+}

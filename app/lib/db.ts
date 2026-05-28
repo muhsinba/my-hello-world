@@ -8,7 +8,9 @@ import path from 'node:path'
 const globalForDb = globalThis as unknown as { db?: Database.Database }
 
 function createDb() {
-  const db = new Database(path.join(process.cwd(), 'app.db'))
+  // DB_PATH lets prod point at a persistent location outside the source tree.
+  const dbPath = process.env.DB_PATH ?? path.join(process.cwd(), 'app.db')
+  const db = new Database(dbPath)
   db.pragma('journal_mode = WAL')
 
   db.exec(`
@@ -23,8 +25,8 @@ function createDb() {
     CREATE TABLE IF NOT EXISTS login_history (
       id            INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id       INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-      logged_in_at  TEXT    NOT NULL DEFAULT (datetime('now'),
-      logged_out_at TEXT)
+      logged_in_at  TEXT    NOT NULL DEFAULT (datetime('now')),
+      logged_out_at TEXT
     );
   `)
 

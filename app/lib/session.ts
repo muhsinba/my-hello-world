@@ -5,6 +5,9 @@ import { cookies } from 'next/headers'
 import type { SessionPayload } from '@/app/lib/definitions'
 
 const secretKey = process.env.SESSION_SECRET
+if (!secretKey) {
+  throw new Error('SESSION_SECRET environment variable is required')
+}
 const encodedKey = new TextEncoder().encode(secretKey)
 
 export async function encrypt(payload: SessionPayload) {
@@ -26,9 +29,9 @@ export async function decrypt(session: string | undefined = '') {
   }
 }
 
-export async function createSession(userId: string) {
-  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-  const session = await encrypt({ userId, expiresAt })
+export async function createSession(userId: string, loginId: number) {
+  const expiresAt = new Date(Date.now() + 3 * 60 * 1000)
+  const session = await encrypt({ userId, loginId, expiresAt })
   const cookieStore = await cookies()
 
   cookieStore.set('session', session, {
@@ -38,6 +41,11 @@ export async function createSession(userId: string) {
     sameSite: 'lax',
     path: '/',
   })
+}
+
+export async function getSession() {
+  const cookieStore = await cookies()
+  return decrypt(cookieStore.get('session')?.value)
 }
 
 export async function deleteSession() {

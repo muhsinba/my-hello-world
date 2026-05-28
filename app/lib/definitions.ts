@@ -33,5 +33,6 @@ export type FormState =
 
 export type SessionPayload = {
   userId: string
+  loginId: number
   expiresAt: Date
 }
