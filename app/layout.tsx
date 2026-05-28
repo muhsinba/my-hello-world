@@ -13,8 +13,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://mspartnersservices.com"),
   title: "MS Partners Services",
-  description: "Beutify your life with MS Partners Services",
+  description: "Beautify your life with MS Partners Services",
+  openGraph: {
+    title: "MS Partners Services",
+    description: "Beautify your life with MS Partners Services",
+    url: "https://mspartnersservices.com",
+    siteName: "MS Partners Services",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MS Partners Services",
+    description: "Beautify your life with MS Partners Services",
+  },
 };
 
 export default function RootLayout({
