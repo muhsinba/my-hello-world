@@ -4,23 +4,29 @@ import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import type { SessionPayload } from '@/app/lib/definitions'
 
-const secretKey = process.env.SESSION_SECRET
-if (!secretKey) {
-  throw new Error('SESSION_SECRET environment variable is required')
+// Lazy so `next build` doesn't evaluate this at module-load time, when
+// SESSION_SECRET isn't set. The check still fires on first request.
+let cachedKey: Uint8Array | undefined
+function getEncodedKey() {
+  if (cachedKey) return cachedKey
+  const secretKey = process.env.SESSION_SECRET
+  if (!secretKey) {
+    throw new Error('SESSION_SECRET environment variable is required')
+  }
+  return (cachedKey = new TextEncoder().encode(secretKey))
 }
-const encodedKey = new TextEncoder().encode(secretKey)
 
 export async function encrypt(payload: SessionPayload) {
   return new SignJWT(payload)
     .setProtectedHeader({ alg: 'HS256' })
     .setIssuedAt()
     .setExpirationTime('7d')
-    .sign(encodedKey)
+    .sign(getEncodedKey())
 }
 
 export async function decrypt(session: string | undefined = '') {
   try {
-    const { payload } = await jwtVerify(session, encodedKey, {
+    const { payload } = await jwtVerify(session, getEncodedKey(), {
       algorithms: ['HS256'],
     })
     return payload as SessionPayload & { iat: number; exp: number }
