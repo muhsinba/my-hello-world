@@ -1,12 +1,12 @@
 # Deploying to a single Google Compute Engine VM
 
-Target: one `e2-small` VM in `europe-west3-a`, Debian 12, Node 20, Caddy fronting Next.js on port 3000 with auto-HTTPS. SQLite file lives on the VM's persistent boot disk at `/var/lib/myapp/app.db`.
+Target: one `e2-small` VM in `europe-west3-a`, Debian 12, Node 20, Caddy fronting Next.js on port 3000. Initially served over **HTTP only** — adding HTTPS later is one config swap (see "Switching to HTTPS later" below). SQLite file lives on the VM's persistent boot disk at `/var/lib/myapp/app.db`.
 
 You will need:
 
 - A GCP project with billing enabled.
 - The `gcloud` CLI installed and authenticated locally (`gcloud auth login`).
-- A domain (or subdomain) you control, so Caddy can get a Let's Encrypt cert.
+- A domain — **not required for the initial HTTP deploy**, but needed when you turn on HTTPS later.
 
 ## 1. Create the VM
 
@@ -32,17 +32,9 @@ gcloud compute instances describe myapp --zone=europe-west3-a \
   --format='value(networkInterfaces[0].accessConfigs[0].natIP)'
 ```
 
-## 2. Point your domain at the VM
+Note that IP for later — you'll visit `http://THAT_IP/` once the app is up.
 
-In your DNS provider, create an **A record** for the domain you want to use (e.g. `myapp.example.com`) pointing at the IP from the previous step. Wait a minute or two for it to propagate. You can sanity-check with:
-
-```bash
-nslookup myapp.example.com
-```
-
-Caddy will refuse to issue a cert until DNS resolves correctly.
-
-## 3. SSH in and provision
+## 2. SSH in and provision
 
 ```bash
 gcloud compute ssh myapp --zone=europe-west3-a
@@ -50,7 +42,7 @@ gcloud compute ssh myapp --zone=europe-west3-a
 
 Everything below runs **on the VM**.
 
-### 3a. Install Node 20, Caddy, and build tools
+### 2a. Install Node 20, Caddy, and build tools
 
 ```bash
 sudo apt-get update
@@ -69,7 +61,7 @@ sudo apt-get install -y caddy
 
 `build-essential` and `python3` are required because `better-sqlite3` builds a native binding during `npm ci`.
 
-### 3b. Create the app user and directories
+### 2b. Create the app user and directories
 
 ```bash
 sudo useradd --system --shell /usr/sbin/nologin --home /opt/myapp myapp
@@ -77,7 +69,7 @@ sudo mkdir -p /opt/myapp /var/lib/myapp
 sudo chown -R myapp:myapp /opt/myapp /var/lib/myapp
 ```
 
-### 3c. Clone, build, and install
+### 2c. Clone, build, and install
 
 ```bash
 sudo -u myapp git clone https://github.com/muhsinba/my-hello-world.git /opt/myapp
@@ -86,7 +78,7 @@ sudo -u myapp npm ci
 sudo -u myapp npm run build
 ```
 
-### 3d. Create the env file
+### 2d. Create the env file
 
 ```bash
 sudo cp /opt/myapp/deploy/app.env.example /etc/myapp.env
@@ -98,7 +90,7 @@ openssl rand -base64 48
 sudo nano /etc/myapp.env   # paste the secret into SESSION_SECRET
 ```
 
-### 3e. Install and start the systemd unit
+### 2e. Install and start the systemd unit
 
 ```bash
 sudo cp /opt/myapp/deploy/myapp.service /etc/systemd/system/myapp.service
@@ -109,17 +101,41 @@ sudo systemctl status myapp
 
 If it failed to start, check logs with `sudo journalctl -u myapp -e`.
 
-### 3f. Configure Caddy
-
-Edit the placeholder domain to match yours, then install:
+### 2f. Configure Caddy (HTTP for now)
 
 ```bash
 sudo cp /opt/myapp/deploy/Caddyfile /etc/caddy/Caddyfile
-sudo nano /etc/caddy/Caddyfile   # change your-domain.example.com to your real domain
 sudo systemctl reload caddy
 ```
 
-Visit `https://your-domain.example.com` — first request may take ~10 seconds while Caddy fetches the TLS cert. After that, the home page should load over HTTPS, and login should work.
+The shipped Caddyfile listens on `:80` and reverse-proxies to Next.js on `:3000` — no domain or TLS cert needed.
+
+Visit `http://VM_EXTERNAL_IP/` in your browser (use the IP you got at the end of §1). The home page should load, and login should work — `SECURE_COOKIES=false` in the env file lets the session cookie ride plain HTTP.
+
+## Switching to HTTPS later
+
+When you have a domain, three changes turn on TLS:
+
+1. **DNS** — create an A record for the domain pointing at the VM's external IP. Confirm with `nslookup your-domain.com`.
+
+2. **Caddyfile** — on the VM, replace `/etc/caddy/Caddyfile` with a domain block:
+
+   ```caddyfile
+   your-domain.com {
+       encode gzip
+       reverse_proxy localhost:3000
+   }
+   ```
+
+   Then `sudo systemctl reload caddy`. First request takes ~10 seconds while Caddy fetches a Let's Encrypt cert.
+
+3. **Flip the secure-cookie flag** — edit `/etc/myapp.env`:
+
+   ```
+   SECURE_COOKIES=true
+   ```
+
+   Then `sudo systemctl restart myapp`. Do this **after** HTTPS is working — flipping it before TLS means the browser drops the session cookie and login silently fails.
 
 ## Updating the app later
 

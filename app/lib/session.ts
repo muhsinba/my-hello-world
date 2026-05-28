@@ -36,7 +36,8 @@ export async function createSession(userId: string, loginId: number) {
 
   cookieStore.set('session', session, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // Opt-in via env var so HTTP-only demos work; flip to true once HTTPS is on.
+    secure: process.env.SECURE_COOKIES === 'true',
     expires: expiresAt,
     sameSite: 'lax',
     path: '/',

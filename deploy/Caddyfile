@@ -1,6 +1,13 @@
-# Replace your-domain.example.com with the DNS name pointed at the VM's external IP.
-# Caddy will auto-fetch a Let's Encrypt cert on first request.
-your-domain.example.com {
+# HTTP-only — accessible at http://VM_EXTERNAL_IP/
+# When you buy a domain and want HTTPS, replace this whole block with:
+#
+#   your-domain.example.com {
+#       encode gzip
+#       reverse_proxy localhost:3000
+#   }
+#
+# Caddy will auto-fetch a Let's Encrypt cert on the next reload.
+:80 {
 	encode gzip
 	reverse_proxy localhost:3000
 }
