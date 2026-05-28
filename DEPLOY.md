@@ -15,6 +15,9 @@ Run these locally. Replace `YOUR_PROJECT_ID`.
 ```bash
 gcloud config set project YOUR_PROJECT_ID
 
+# Enable the Compute Engine API (idempotent, ~30s on first run)
+gcloud services enable compute.googleapis.com
+
 gcloud compute instances create myapp \
   --zone=europe-west3-a \
   --machine-type=e2-small \
@@ -23,7 +26,19 @@ gcloud compute instances create myapp \
   --tags=http-server,https-server
 ```
 
-The `http-server` and `https-server` tags map to GCP's default firewall rules — ports 80 and 443 will be open to the internet.
+The `http-server` / `https-server` tags only do something if matching firewall rules target them. Older GCP projects had `default-allow-http` / `default-allow-https` rules pre-created; newer ones often don't. Create them explicitly:
+
+```bash
+gcloud compute firewall-rules create default-allow-http \
+  --network=default --direction=INGRESS --action=ALLOW \
+  --rules=tcp:80 --source-ranges=0.0.0.0/0 --target-tags=http-server
+
+gcloud compute firewall-rules create default-allow-https \
+  --network=default --direction=INGRESS --action=ALLOW \
+  --rules=tcp:443 --source-ranges=0.0.0.0/0 --target-tags=https-server
+```
+
+If you see `already exists`, the rule was pre-created — safe to ignore.
 
 Get the VM's external IP:
 
