@@ -304,3 +304,88 @@ body {
   color: var(--dark-blue);
   font-weight: 600;
 }
+
+.lang-switcher{
+  position: relative;
+  margin-left: 16px;
+  font-size: 14px;
+}
+
+/* Both the closed trigger and each menu row share the same row layout. */
+.lang-trigger,
+.lang-menu button{
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: transparent;
+  color: #000000;
+  font-size: 14px;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* SVGs default to inline with extra baseline space — force block. */
+.lang-trigger svg,
+.lang-menu svg{
+  display: block;
+  flex-shrink: 0;
+}
+
+.lang-trigger{
+  padding: 6px 10px;
+  background: #ffffff;
+  border: 1px solid #c5c5d6;
+  border-radius: 6px;
+  min-width: 130px;
+}
+.lang-trigger:hover{
+  border-color: #8b8ba1;
+}
+
+.lang-caret{
+  margin-left: auto;
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.lang-menu{
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  border: 1px solid #c5c5d6;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  min-width: 160px;
+  overflow: hidden;
+  z-index: 10;
+}
+.lang-menu li{
+  margin: 0;
+}
+/* Separator between rows */
+.lang-menu li + li{
+  border-top: 1px solid #ecedf0;
+}
+.lang-menu button{
+  width: 100%;
+  padding: 10px 14px;
+  text-align: left;
+}
+.lang-menu button:hover,
+.lang-menu button:focus-visible{
+  background: #dde4f0;
+  outline: none;
+}
+.lang-menu li[aria-selected="true"] button{
+  font-weight: 700;
+  background: #f4f6fb;
+}

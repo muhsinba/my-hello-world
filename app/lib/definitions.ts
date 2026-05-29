@@ -1,24 +1,27 @@
 import * as z from 'zod'
+import type { Dictionary } from '@/app/[lang]/dictionaries'
 
-export const SignupFormSchema = z.object({
-  name: z
-    .string()
-    .min(2, { error: 'Name must be at least 2 characters long.' })
-    .trim(),
-  email: z.email({ error: 'Please enter a valid email.' }).trim(),
-  password: z
-    .string()
-    .min(8, { error: 'Be at least 8 characters long' })
-    .regex(/[a-zA-Z]/, { error: 'Contain at least one letter.' })
-    .regex(/[0-9]/, { error: 'Contain at least one number.' })
-    .regex(/[^a-zA-Z0-9]/, { error: 'Contain at least one special character.' })
-    .trim(),
-})
+export const buildSignupSchema = (errors: Dictionary['errors']) =>
+  z.object({
+    name: z
+      .string()
+      .min(2, { error: errors.nameMin })
+      .trim(),
+    email: z.email({ error: errors.emailInvalid }).trim(),
+    password: z
+      .string()
+      .min(8, { error: errors.passwordMin })
+      .regex(/[a-zA-Z]/, { error: errors.passwordLetter })
+      .regex(/[0-9]/, { error: errors.passwordNumber })
+      .regex(/[^a-zA-Z0-9]/, { error: errors.passwordSpecial })
+      .trim(),
+  })
 
-export const LoginFormSchema = z.object({
-  email: z.email({ error: 'Please enter a valid email.' }).trim(),
-  password: z.string().min(1, { error: 'Password is required.' }),
-})
+export const buildLoginSchema = (errors: Dictionary['errors']) =>
+  z.object({
+    email: z.email({ error: errors.emailInvalid }).trim(),
+    password: z.string().min(1, { error: errors.passwordRequired }),
+  })
 
 export type FormState =
   | {

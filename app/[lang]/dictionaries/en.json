@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "title": "MS Partners Services",
+    "description": "Beautify your life with MS Partners Services"
+  },
+  "header": {
+    "greeting": "Hi, {name}",
+    "logOut": "Log out",
+    "logIn": "Log in",
+    "signUp": "Sign up"
+  },
+  "home": {
+    "title": "MS Partners Services: Tip Calculator"
+  },
+  "tipCalculator": {
+    "billAmount": "Bill Amount",
+    "tipPercentage": "Tip Percentage",
+    "splitTheBill": "Split the Bill",
+    "numberOfPeople": "Number of People",
+    "calculate": "Calculate",
+    "tip": "Tip",
+    "billPerPerson": "Bill Per Person",
+    "totalBill": "Total Bill",
+    "reset": "Reset"
+  },
+  "login": {
+    "title": "Log in",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "you@example.com",
+    "submit": "Log In",
+    "submitting": "Logging in…",
+    "noAccount": "No account yet?",
+    "signUpLink": "Sign up"
+  },
+  "signup": {
+    "title": "Create account",
+    "name": "Name",
+    "namePlaceholder": "Jane Doe",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "you@example.com",
+    "passwordMustLabel": "Password must:",
+    "submit": "Sign Up",
+    "submitting": "Creating…",
+    "hasAccount": "Already have an account?",
+    "logInLink": "Log in"
+  },
+  "errors": {
+    "nameMin": "Name must be at least 2 characters long.",
+    "emailInvalid": "Please enter a valid email.",
+    "passwordRequired": "Password is required.",
+    "passwordMin": "Be at least 8 characters long",
+    "passwordLetter": "Contain at least one letter.",
+    "passwordNumber": "Contain at least one number.",
+    "passwordSpecial": "Contain at least one special character.",
+    "emailExists": "An account with this email already exists.",
+    "invalidCredentials": "Invalid email or password.",
+    "signupFailed": "An error occurred while creating your account."
+  },
+  "language": {
+    "switcherLabel": "Language",
+    "en": "English",
+    "tr": "Türkçe"
+  }
+}

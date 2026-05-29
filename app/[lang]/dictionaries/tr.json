@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "title": "MS Partners Services",
+    "description": "MS Partners Services ile hayatınızı güzelleştirin"
+  },
+  "header": {
+    "greeting": "Merhaba, {name}",
+    "logOut": "Çıkış yap",
+    "logIn": "Giriş yap",
+    "signUp": "Kayıt ol"
+  },
+  "home": {
+    "title": "MS Partners Services: Bahşiş Hesaplayıcı"
+  },
+  "tipCalculator": {
+    "billAmount": "Hesap Tutarı",
+    "tipPercentage": "Bahşiş Yüzdesi",
+    "splitTheBill": "Hesabı Böl",
+    "numberOfPeople": "Kişi Sayısı",
+    "calculate": "Hesapla",
+    "tip": "Bahşiş",
+    "billPerPerson": "Kişi Başı Tutar",
+    "totalBill": "Toplam Tutar",
+    "reset": "Sıfırla"
+  },
+  "login": {
+    "title": "Giriş yap",
+    "email": "E-posta",
+    "password": "Parola",
+    "emailPlaceholder": "siz@ornek.com",
+    "submit": "Giriş Yap",
+    "submitting": "Giriş yapılıyor…",
+    "noAccount": "Hesabınız yok mu?",
+    "signUpLink": "Kayıt ol"
+  },
+  "signup": {
+    "title": "Hesap oluştur",
+    "name": "Ad",
+    "namePlaceholder": "Ayşe Yılmaz",
+    "email": "E-posta",
+    "password": "Parola",
+    "emailPlaceholder": "siz@ornek.com",
+    "passwordMustLabel": "Parola şunları içermelidir:",
+    "submit": "Kayıt Ol",
+    "submitting": "Oluşturuluyor…",
+    "hasAccount": "Zaten hesabınız var mı?",
+    "logInLink": "Giriş yap"
+  },
+  "errors": {
+    "nameMin": "Ad en az 2 karakter olmalıdır.",
+    "emailInvalid": "Lütfen geçerli bir e-posta adresi girin.",
+    "passwordRequired": "Parola gereklidir.",
+    "passwordMin": "En az 8 karakter olmalıdır",
+    "passwordLetter": "En az bir harf içermelidir.",
+    "passwordNumber": "En az bir rakam içermelidir.",
+    "passwordSpecial": "En az bir özel karakter içermelidir.",
+    "emailExists": "Bu e-posta ile zaten bir hesap mevcut.",
+    "invalidCredentials": "E-posta veya parola hatalı.",
+    "signupFailed": "Hesabınız oluşturulurken bir hata oluştu."
+  },
+  "language": {
+    "switcherLabel": "Dil",
+    "en": "English",
+    "tr": "Türkçe"
+  }
+}

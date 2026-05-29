@@ -3,16 +3,29 @@
 import bcrypt from 'bcryptjs'
 import { redirect } from 'next/navigation'
 import {
-  SignupFormSchema,
-  LoginFormSchema,
+  buildSignupSchema,
+  buildLoginSchema,
   type FormState,
 } from '@/app/lib/definitions'
 import { db, type UserRow } from '@/app/lib/db'
 import { createSession, deleteSession, getSession } from '@/app/lib/session'
+import {
+  defaultLocale,
+  getDictionary,
+  hasLocale,
+  type Locale,
+} from '@/app/[lang]/dictionaries'
+
+function readLocale(formData: FormData): Locale {
+  const value = formData.get('locale')
+  return typeof value === 'string' && hasLocale(value) ? value : defaultLocale
+}
 
 export async function signup(state: FormState, formData: FormData): Promise<FormState> {
-  // 1. Validate fields
-  const validatedFields = SignupFormSchema.safeParse({
+  const locale = readLocale(formData)
+  const dict = await getDictionary(locale)
+
+  const validatedFields = buildSignupSchema(dict.errors).safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
     password: formData.get('password'),
@@ -24,33 +37,33 @@ export async function signup(state: FormState, formData: FormData): Promise<Form
 
   const { name, email, password } = validatedFields.data
 
-  // 2. Reject duplicate emails
   const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email)
   if (existing) {
-    return { errors: { email: ['An account with this email already exists.'] } }
+    return { errors: { email: [dict.errors.emailExists] } }
   }
 
-  // 3. Hash the password and store the user
   const hashedPassword = await bcrypt.hash(password, 10)
   const result = db
     .prepare('INSERT INTO users (name, email, password) VALUES (?, ?, ?)')
     .run(name, email, hashedPassword)
 
   if (!result.lastInsertRowid) {
-    return { message: 'An error occurred while creating your account.' }
+    return { message: dict.errors.signupFailed }
   }
 
-  // 4. Record the first login, create the session, then redirect
   const userId = Number(result.lastInsertRowid)
   const loginResult = db
     .prepare('INSERT INTO login_history (user_id) VALUES (?)')
     .run(userId)
   await createSession(String(userId), Number(loginResult.lastInsertRowid))
-  redirect('/')
+  redirect(`/${locale}`)
 }
 
 export async function login(state: FormState, formData: FormData): Promise<FormState> {
-  const validatedFields = LoginFormSchema.safeParse({
+  const locale = readLocale(formData)
+  const dict = await getDictionary(locale)
+
+  const validatedFields = buildLoginSchema(dict.errors).safeParse({
     email: formData.get('email'),
     password: formData.get('password'),
   })
@@ -67,19 +80,18 @@ export async function login(state: FormState, formData: FormData): Promise<FormS
 
   // Use the same generic message whether the email or password is wrong,
   // so we don't reveal which emails are registered.
-  const invalid: FormState = { message: 'Invalid email or password.' }
+  const invalid: FormState = { message: dict.errors.invalidCredentials }
   if (!user) return invalid
 
   const passwordsMatch = await bcrypt.compare(password, user.password)
   if (!passwordsMatch) return invalid
 
-  //create a login history record for the user
   const loginResult = db
     .prepare('INSERT INTO login_history (user_id) VALUES (?)')
     .run(user.id)
 
   await createSession(String(user.id), Number(loginResult.lastInsertRowid))
-  redirect('/')
+  redirect(`/${locale}`)
 }
 
 export async function logout() {

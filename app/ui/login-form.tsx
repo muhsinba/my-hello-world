@@ -4,22 +4,44 @@ import Link from 'next/link'
 import { useActionState } from 'react'
 import { login } from '@/app/actions/auth'
 
-export default function LoginPage() {
+type LoginDict = {
+  title: string
+  email: string
+  password: string
+  emailPlaceholder: string
+  submit: string
+  submitting: string
+  noAccount: string
+  signUpLink: string
+}
+
+type ErrorDict = { invalidCredentials: string }
+
+export default function LoginForm({
+  lang,
+  dict,
+  errors,
+}: {
+  lang: string
+  dict: LoginDict
+  errors: ErrorDict
+}) {
   const [state, action, pending] = useActionState(login, undefined)
 
   return (
     <div className="auth-wrapper">
       <form action={action} className="auth-card">
-        <h1 className="auth-title">Log in</h1>
+        <input type="hidden" name="locale" value={lang} />
+        <h1 className="auth-title">{dict.title}</h1>
 
         <div className="auth-field">
-          <label htmlFor="email">Email</label>
-          <input id="email" name="email" type="email" placeholder="you@example.com" />
+          <label htmlFor="email">{dict.email}</label>
+          <input id="email" name="email" type="email" placeholder={dict.emailPlaceholder} />
           {state?.errors?.email && <p className="auth-error">{state.errors.email[0]}</p>}
         </div>
 
         <div className="auth-field">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">{dict.password}</label>
           <input id="password" name="password" type="password" />
           {state?.errors?.password && <p className="auth-error">{state.errors.password[0]}</p>}
         </div>
@@ -27,11 +49,11 @@ export default function LoginPage() {
         {state?.message && <p className="auth-error">{state.message}</p>}
 
         <button disabled={pending} type="submit" className="auth-button">
-          {pending ? 'Logging in…' : 'Log In'}
+          {pending ? dict.submitting : dict.submit}
         </button>
 
         <p className="auth-switch">
-          No account yet? <Link href="/signup">Sign up</Link>
+          {dict.noAccount} <Link href={`/${lang}/signup`}>{dict.signUpLink}</Link>
         </p>
       </form>
     </div>

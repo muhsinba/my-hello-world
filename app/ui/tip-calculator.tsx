@@ -3,7 +3,19 @@
 import { useState } from "react";
 import { FaDollarSign, FaUser, FaPercentage } from "react-icons/fa";
 
-export default function TipCalculator() {
+type TipCalculatorDict = {
+  billAmount: string
+  tipPercentage: string
+  splitTheBill: string
+  numberOfPeople: string
+  calculate: string
+  tip: string
+  billPerPerson: string
+  totalBill: string
+  reset: string
+}
+
+export default function TipCalculator({ dict }: { dict: TipCalculatorDict }) {
 const [bill, setBill] = useState(0);
 const [percentage, setPercentage] = useState(0);
 const [results, setResults] = useState({tipAmount:0, totalPerPerson:0, total:0});
@@ -30,7 +42,7 @@ const resetAllValues = () => {
   <div className="TipCalculator">
     <div className="LeftContainer">
 
-        <label> Bill Amount</label>
+        <label> {dict.billAmount}</label>
        <div className="input-with-icon">
        <FaDollarSign />
        <input
@@ -39,7 +51,7 @@ const resetAllValues = () => {
           onChange={(e) => setBill(Number(e.target.value))}/>
       </div>
       <div className="percentage-label">
-        <label>Tip Percentage</label>
+        <label>{dict.tipPercentage}</label>
         <FaPercentage/>
       </div>
       <div className="percentage-buttons">
@@ -60,13 +72,13 @@ const resetAllValues = () => {
         checked = {isSplitting}
         onChange={(e)=>setisSplitting(e.target.checked)}
         />
-        Split the Bill
+        {dict.splitTheBill}
       </label>
       </div>
 
       {isSplitting &&
       <div>
-      <label>Number of People</label>
+      <label>{dict.numberOfPeople}</label>
       <div className="input-with-icon">
       <FaUser />
       <input type="number"
@@ -77,26 +89,26 @@ const resetAllValues = () => {
       </div>
       }
 
-      <button onClick={calculateTip} className="calculate-button">Calculate</button>
+      <button onClick={calculateTip} className="calculate-button">{dict.calculate}</button>
     </div>
     <div className="RightContainer">
       <div className="result-container">
-        <p>Tip</p>
+        <p>{dict.tip}</p>
         <p className="result-value">${results.tipAmount.toFixed(2)}</p>
       </div>
 
       {isSplitting && (
       <div className="result-container">
-        <p>Bill Per Person</p>
+        <p>{dict.billPerPerson}</p>
         <p className="result-value">${isFinite(results.totalPerPerson)?results.totalPerPerson.toFixed(2):0}</p>
       </div>
       )}
 
       <div className="result-container">
-        <p>Total Bill</p>
+        <p>{dict.totalBill}</p>
         <p className="result-value">${results.total.toFixed(2)}</p>
       </div>
-      <button onClick={resetAllValues} className="calculate-button" >Reset</button>
+      <button onClick={resetAllValues} className="calculate-button" >{dict.reset}</button>
     </div>
   </div>
   );
