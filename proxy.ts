@@ -62,5 +62,5 @@ export default async function proxy(req: NextRequest) {
 
 // Skip Next internals, static assets, and the OG image route.
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|icon.svg|opengraph-image|favicon.ico|.*\\.png$).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|icon.svg|opengraph-image|favicon.ico|.*\\.(?:png|svg|jpg|jpeg|gif|webp)$).*)'],
 }

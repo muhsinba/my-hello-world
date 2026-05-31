@@ -62,5 +62,14 @@
     "switcherLabel": "Language",
     "en": "English",
     "tr": "Türkçe"
+  },
+  "ask": {
+    "title": "Rule Assistant",
+    "subtitle": "Fast, reliable answers about the Rules. The final authority is always a Rules Official.",
+    "placeholder": "Ask about a rule, penalty, or ruling…",
+    "send": "Ask",
+    "sending": "Thinking…",
+    "intro": "Got a ruling question on the course? Describe your situation and I'll explain the rule, the procedure, and any penalty — citing the relevant Rule number.",
+    "errorGeneric": "Something went wrong reaching the assistant. Please try again."
   }
 }

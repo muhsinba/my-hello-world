@@ -62,5 +62,14 @@
     "switcherLabel": "Dil",
     "en": "English",
     "tr": "Türkçe"
+  },
+  "ask": {
+    "title": "Kural Asistanı",
+    "subtitle": "Kurallar hakkında hızlı ve güvenilir yanıtlar. Nihai otorite her zaman Rule Official'dır.",
+    "placeholder": "Bir kural, ceza ya da karar hakkında soru sorun…",
+    "send": "Sor",
+    "sending": "Düşünüyor…",
+    "intro": "Sahada bir kural sorunuz mu var? Durumunuzu anlatın; geçerli kuralı, izlenmesi gereken prosedürü ve varsa cezayı ilgili kural numarasıyla birlikte açıklayayım.",
+    "errorGeneric": "Asistana ulaşırken bir sorun oluştu. Lütfen tekrar deneyin."
   }
 }
